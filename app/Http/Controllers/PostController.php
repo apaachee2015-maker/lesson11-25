@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\category;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    use HasFactory;
 
     public function index()
     {
-    $posts = Post::all();
-    return view('post.index', compact('posts'));
+
+    $category = category::find(1);
+    $post = Post::find(1);
+
+   dd($post->category);
+
+
+//    return view('post.index', compact('posts'));
+
+
     }
 
 
