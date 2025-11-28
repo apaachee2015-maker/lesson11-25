@@ -14,13 +14,22 @@ class PostController extends Controller
     public function index()
     {
 
+        $category = category::find(1);
+        $post = Post::find(1);
+        dd($post->category);
 
-//    $post = Post::find(2);
+//        dd($category->posts);
+//        $posts = Post::where('category_id', $category->id)->get();
+//        dd($posts);
+
+
+//    $post = Post::find(1);
 //
 //   dd($post->category);
 
+//        $posts = Post::all();
+//       return view('post.index', compact('posts'));
 
-   return view('post.index', compact('posts'));
 
 
     }
