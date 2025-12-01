@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\category;
 use App\Models\Post;
+use App\Models\PostTag;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 
@@ -14,9 +16,14 @@ class PostController extends Controller
     public function index()
     {
 
-        $category = category::find(1);
-        $post = Post::find(1);
-        dd($post->category);
+        $posts = Post::all();
+
+        return view('post.index', compact('posts'));
+
+//        $category = category::find(1);
+//        $post = Post::find(1);
+//        $tag = Tag::find(1);
+//        dd($tag->posts);
 
 //        dd($category->posts);
 //        $posts = Post::where('category_id', $category->id)->get();
@@ -26,10 +33,6 @@ class PostController extends Controller
 //    $post = Post::find(1);
 //
 //   dd($post->category);
-
-//        $posts = Post::all();
-//       return view('post.index', compact('posts'));
-
 
 
     }
@@ -46,18 +49,39 @@ class PostController extends Controller
 
     public function create()
     {
-      return view('post.create');
+
+        $categories = category::all();
+        $tags = Tag::all();
+        return view('post.create', compact('categories', 'tags'));
 
     }
 
     public function store()
     {
         $data = request()->validate([
-            'title' => 'string',
+            'title' => 'required|string',
             'content' => 'string',
-            'image' => 'string'
+            'image' => 'string',
+            'category_id' => '',
+            'tags' => '',
         ]);
-        Post::create($data);
+
+       $tags = $data['tags'];
+       unset($data['tags']);
+//        dd($tags, $data);
+
+       $post = Post::create($data);
+
+       $post->tags()->attach($tags);
+//       foreach ($tags as $tag) {
+//
+//       PostTag::firstOrcreate([
+//        'tag_id' => $tag,
+//           'post_id' => $post->id,
+//       ]);
+//
+//       }
+
         return redirect()->route('post.index');
     }
 
@@ -69,9 +93,11 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-//        dd($post->title);
-        return view('post.edit', compact('post'));
+        $categories = category::all();
+        $tags = Tag::all();
+        return view('post.edit', compact('post', 'categories', 'tags'));
 
+//        dd($post->title);
     }
 
     public function update(Post $post)
@@ -79,10 +105,17 @@ class PostController extends Controller
         $data = request()->validate([
             'title' => 'string',
             'content' => 'string',
-            'image' => 'string'
+            'image' => 'string',
+            'category_id' => '',
+            'tags' => '',
+
         ]);
 
+        $tags = $data['tags'];
+        unset($data['tags']);
+
         $post->update($data);
+        $post->tags()->sync($tags);
         return redirect()->route('post.show', $post->id);
     }
 
@@ -110,8 +143,8 @@ class PostController extends Controller
             'is_published' => 1,
         ];
 
-       $post = Post::firstOrCreate(
-            ['title' => 'Whole Entire Content' ],
+        $post = Post::firstOrCreate(
+            ['title' => 'Whole Entire Content'],
 
             [
                 'title' => 'Whole Entire Content',
@@ -122,8 +155,8 @@ class PostController extends Controller
             ]
         );
 
-       dump($post->content);
-       dd('finished');
+        dump($post->content);
+        dd('finished');
     }
 
     public function updateOrCreate()
@@ -135,17 +168,17 @@ class PostController extends Controller
             'likes' => 498,
             'is_published' => 0
         ];
-    $post = Post::updateOrCreate(
-        ['title' => 'from phpstorm'],
+        $post = Post::updateOrCreate(
+            ['title' => 'from phpstorm'],
 
-        [
-        'title' => 'from phpstorm',
-        'content' => 'Updated one more time',
-        'image' => 'image.jpg',
-        'likes' => 498,
-        'is_published' => 0
-    ]);
-    dump($post->content);
+            [
+                'title' => 'from phpstorm',
+                'content' => 'Updated one more time',
+                'image' => 'image.jpg',
+                'likes' => 498,
+                'is_published' => 0
+            ]);
+        dump($post->content);
         dd('222222');
     }
 
