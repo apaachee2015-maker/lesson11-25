@@ -4,22 +4,37 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\MyPlaceController;
-use App\Http\Controllers\photocontroller;
+use App\Http\Controllers\Post\BaseController;
+use App\Http\Controllers\Post\CreateController;
+use App\Http\Controllers\Post\DestroyController;
+use App\Http\Controllers\Post\EditController;
+use App\Http\Controllers\Post\IndexController;
+use App\Http\Controllers\Post\ShowController;
+use App\Http\Controllers\Post\StoreController;
+use App\Http\Controllers\Post\UpdateController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {return 'Apachee !';});
+Route::get('/', function () {
+    return 'Apachee !';
+});
 
 
-Route::get('/posts', [PostController::class, 'index'])->name('post.index');
-Route::get('/posts/create', [PostController::class, 'create'])->name('post.create');
+Route::get('/', function () {
+  return 'Admin Mainpage';
+});
 
-Route::post('/posts', [PostController::class, 'store'])->name('post.store');
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('post.show');
-Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
-Route::patch('/posts/{post}', [PostController::class, 'update'])->name('post.update');
-Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('post.delete');
+Route::get('/posts', IndexController::class)->name('post.index');
+Route::get('/posts/create', CreateController::class)->name('post.create');
+
+Route::post('/posts', StoreController::class)->name('post.store');
+Route::get('/posts/{post}', ShowController::class)->name('post.show');
+Route::get('/posts/{post}/edit', EditController::class)->name('post.edit');
+Route::patch('/posts/{post}', UpdateController::class)->name('post.update');
+Route::delete('/posts/{post}', [DestroyController::class)->name('post.delete');
+
+
 
 
 Route::get('/posts/update', [PostController::class, 'update']);
