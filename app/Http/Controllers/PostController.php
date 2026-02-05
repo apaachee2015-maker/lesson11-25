@@ -12,63 +12,38 @@ class PostController extends Controller
         public function index()
         {
             $posts = Post::all();
-
-           return view('posts', compact('posts'));
+           return view('post.index', compact('posts'));
         }
-                public function create()
+
+
+
+        public function create()
         {
-            $postsArr = [
-                [
-                    'title' => 'some title',
-                    'content' => 'some content',
-                    'image' => 'some image post',
-                    'likes' => 76,
-                    'is_published' => 1,
-                ],
-                [
-                    'title' => 'another title',
-                    'content' => 'another content',
-                    'image' => 'ssome image post',
-                    'likes' => 45,
-                    'is_published' => 1,
-                ],
-                [
-                    'title' => '2 another some title',
-                    'content' => '2 another some content',
-                    'image' => '2 image post',
-                    'likes' => 34,
-                    'is_published' => 0,
-                ],
-                [
-                    'title' => '3 another some title',
-                    'content' => '3 another some content',
-                    'image' => '3 image post',
-                    'likes' => 12,
-                    'is_published' => 1,
-                ],
-                [
-                    'title' => '4  another some title',
-                    'content' => '4  another some content',
-                    'image' => '4 image post',
-                    'likes' => 42,
-                    'is_published' => 1,
-                ],
-                [
-                    'title' => '5 another some title',
-                    'content' => '5 another some content',
-                    'image' => '5 image post',
-                    'likes' => 56,
-                    'is_published' => 1,
-                ],
+            return view('post.create');
+        }
 
-            ];
+        public function store()
+        {
+            $data = request()->validate([
+                'title' => 'string',
+                'content' => 'string',
+                'image' => 'string',
 
-            foreach ($postsArr as $item){
+            ]);
+            Post::create($data);
 
+            return redirect()->route('post.index');
+        }
 
-                Post::create($item);
-            }
-                dd('created');
+        public function show(Post $post)
+        {
+
+            return view('post.show', compact('post'));
+        }
+
+        public function edit(Post $post)
+        {
+            dd('11111111');
         }
 
         public function update() {

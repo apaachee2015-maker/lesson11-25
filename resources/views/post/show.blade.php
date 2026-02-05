@@ -1,23 +1,18 @@
 @extends('layouts.main')
 @section('content')
 
-        <div>
+        <div class="container mt-5">
 
-           <div>  {{ $post->id }} . {{ $post->title }} </div>
+            <div>
+                <a type="button" class="btn btn-outline-success mb-2 mt-5" href="{{ route('post.create') }}">Добавить пост</a>
+            </div>
+
+           <div class="">  {{ $post->id }} . {{ $post->title }} </div>
             <div> {{ $post->content }} </div>
         </div>
-        <div>
-            <a href="{{ route('post.edit', $post->id) }}">Edit</a>
-        </div>
-        <div>
-            <form action="{{ route('post.delete', $post->id) }}" method="post">
-                @csrf
-                @method('delete')
-            <input type="submit" value="delete" class="btn btn-danger">
-            </form>
 
-        </div>
-        <div><a href="{{ route('post.index') }}">Back-Назад</a>
+
+        <div><a class="btn" href="{{ route('post.index') }}">Back-Назад</a>
         </div>
 
 @endsection
