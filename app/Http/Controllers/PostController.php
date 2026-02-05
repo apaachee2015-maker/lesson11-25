@@ -43,27 +43,30 @@ class PostController extends Controller
 
         public function edit(Post $post)
         {
-            dd('11111111');
+            return view('post.edit', compact('post'));
         }
 
-        public function update() {
+        public function update(Post $post) {
 
-            $post = Post::find(6);
+            $data = request()->validate([
+                'title' => 'string',
+                'content' => 'string',
+                'image' => 'string',
 
-            $post->update([
-                'title' => '6 updated some title',
-                'content' => '6 updated some content',
-                'image' => '15 updated image post',
-                'likes' => 65,
-                'is_published' => 1,
             ]);
-            dd($post->image);
+            $post->update($data);
+            return redirect()->route('post.show', $post->id);
         }
 
         public function delete() {
             $post = Post::withTrashed()->find(7);
             $post->restore();
             dd('$post->title');
+        }
+
+        public function destroy(Post $post){
+            $post->delete();
+            return redirect()->route('post.index');
         }
 
         public function firstOrCreate() {
