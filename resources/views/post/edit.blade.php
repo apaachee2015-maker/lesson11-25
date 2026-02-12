@@ -16,7 +16,15 @@
                         <label for="image">Image</label>
                         <input name="image" type="text" class="form-control" id="title" placeholder="image" value="{{ $post->image }}">
                     </div>
-                    <button type="submit" class="btn btn-outline-danger mt-5">Update</button>
+                    <select class="form-control mt-4" name="category_id" id="category" aria-label="Default select example">
+                        @foreach($categories as $category)
+                            <option
+                                {{ $category->id === $post->category->id ? ' selected' : '' }}
+                                value="{{ $category->id }}">{{ $category->title }}</option>
+                        @endforeach
+                    </select>
+
+                    <button type="submit" class="btn btn-outline-danger mt-3">Update</button>
                     <div class="form-group mt-3"><a  type="button" class="btn btn-outline-success mb-2 mt-2" href="{{ route('post.index') }}">Back-Назад</a>
                     </div>
 

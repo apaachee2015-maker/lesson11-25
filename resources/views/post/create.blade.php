@@ -11,12 +11,21 @@
                     <label for="content">Content</label>
                     <textarea name="content" class="form-control" id="content" placeholder="Content"></textarea>
                 </div>
-                <div class="form-group mt-3">
+                <div class="form-group mt-3 mb-3">
                     <label for="image">Image</label>
                     <input name="image" type="text" class="form-control" id="title" placeholder="image">
                 </div>
 
-                <button type="submit" class="btn btn-outline-danger mt-5">Create</button>
+                    <label class="mb-3" for="category">Category</label>
+
+                    <select class="form-control" name="category_id" id="category" aria-label="Default select example">
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->title }}</option>
+                        @endforeach
+                    </select>
+
+
+                <button type="submit" class="btn btn-outline-danger mt-3">Create</button>
     </form>
 
 

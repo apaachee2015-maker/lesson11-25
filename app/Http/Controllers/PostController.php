@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -11,101 +12,109 @@ class PostController extends Controller
 {
     use HasFactory;
 
-        public function index()
-        {
+    public function index()
+    {
 //            $category = Category::find(1);
+//            dd($category->posts);
+//           $post = Post::find(1);
+//           $tag = Tag::find(1);
+//            dump($post->tags);
+//            dd($tag->posts);
 
-            $post = Post::find(1);
-            $tag = Tag::find(1);
-            dd($tag->posts);
-
-//            $posts = Post::all();
-//           return view('post.index', compact('posts'));
-        }
+        $posts = Post::all();
+        return view('post.index', compact('posts'));
+    }
 
 
+    public function create()
+    {
+        $categories = Category::all();
+        return view('post.create', compact('categories'));
+    }
 
-        public function create()
-        {
-            return view('post.create');
-        }
+    public function store()
+    {
+        $data = request()->validate([
+            'title' => 'string',
+            'content' => 'string',
+            'image' => 'string',
+            'category_id' => ''
 
-        public function store()
-        {
-            $data = request()->validate([
-                'title' => 'string',
-                'content' => 'string',
-                'image' => 'string',
+        ]);
+        Post::create($data);
 
+        return redirect()->route('post.index');
+    }
+
+    public function show(Post $post)
+    {
+
+        return view('post.show', compact('post'));
+    }
+
+    public function edit(Post $post)
+    {
+        $categories = Category::all();
+        return view('post.edit', compact('post', 'categories'));
+    }
+
+    public function update(Post $post)
+    {
+
+        $data = request()->validate([
+            'title' => 'string',
+            'content' => 'string',
+            'image' => 'string',
+            'category_id' => ''
+
+        ]);
+        $post->update($data);
+        return redirect()->route('post.show', $post->id);
+    }
+
+    public function delete()
+    {
+        $post = Post::withTrashed()->find(1);
+        $post->restore();
+        dd('$post->title');
+    }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+        return redirect()->route('post.index');
+    }
+
+    public function firstOrCreate()
+    {
+
+
+        $anotherpost = [
+            'title' => 'some title',
+            'content' => 'some content',
+            'image' => 'some image post',
+            'likes' => 76,
+            'is_published' => 1,
+
+        ];
+
+        $post = Post::firstOrCreate(
+            [
+                'title' => 'somewooow title',
+            ],
+
+            [
+                'title' => 'wow some title',
+                'content' => 'wow some content',
+                'image' => 'Awesome image post',
+                'likes' => 96,
+                'is_published' => 1,
             ]);
-            Post::create($data);
 
-            return redirect()->route('post.index');
-        }
+        dump($post->content);
 
-        public function show(Post $post)
-        {
-
-            return view('post.show', compact('post'));
-        }
-
-        public function edit(Post $post)
-        {
-            return view('post.edit', compact('post'));
-        }
-
-        public function update(Post $post) {
-
-            $data = request()->validate([
-                'title' => 'string',
-                'content' => 'string',
-                'image' => 'string',
-
-            ]);
-            $post->update($data);
-            return redirect()->route('post.show', $post->id);
-        }
-
-        public function delete() {
-            $post = Post::withTrashed()->find(7);
-            $post->restore();
-            dd('$post->title');
-        }
-
-        public function destroy(Post $post){
-            $post->delete();
-            return redirect()->route('post.index');
-        }
-
-        public function firstOrCreate() {
-
-
-           $anotherpost = [
-               'title' => 'some title',
-               'content' => 'some content',
-               'image' => 'some image post',
-               'likes' => 76,
-               'is_published' => 1,
-
-           ];
-
-           $post = Post::firstOrCreate(
-               [
-                   'title' => 'somewooow title',
-               ],
-
-               [
-               'title' => 'wow some title',
-               'content' => 'wow some content',
-               'image' => 'Awesome image post',
-               'likes' => 96,
-               'is_published' => 1,
-           ]);
-
-           dump($post->content);
-
-            dd('finished');
-        }
+        dd('finished');
+    }
 
     public function updateOrCreate()
     {
@@ -123,12 +132,12 @@ class PostController extends Controller
             ['title' => '6 some title'],
 
             [
-            'title' => '1116 some title',
-            'content' => '11Updatedsome content',
-            'image' => '111 image post',
-            'likes' => 99,
-            'is_published' => 1,
-        ]);
+                'title' => '1116 some title',
+                'content' => '11Updatedsome content',
+                'image' => '111 image post',
+                'likes' => 99,
+                'is_published' => 1,
+            ]);
 
         dd('Updated');
     }
