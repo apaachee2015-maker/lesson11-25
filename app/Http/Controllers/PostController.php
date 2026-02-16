@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\PostTag;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
@@ -28,8 +29,9 @@ class PostController extends Controller
 
     public function create()
     {
+        $tags = Tag::all();
         $categories = Category::all();
-        return view('post.create', compact('categories'));
+        return view('post.create', compact('categories', 'tags'));
     }
 
     public function store()
@@ -38,10 +40,22 @@ class PostController extends Controller
             'title' => 'string',
             'content' => 'string',
             'image' => 'string',
-            'category_id' => ''
+            'category_id' => '',
+            'tags' => ''
 
         ]);
-        Post::create($data);
+       $tags = $data['tags'];
+       unset($data['tags']);
+//       dd($tags, $data);
+        $post = Post::create($data);
+
+        $post->tags()->attach($tags);
+//        foreach ($tags as $tag) {
+//            PostTag::firstOrCreate([
+//                'tag_id' => $tag,
+//                'post_id' => $post->id,
+//            ]);
+//        }
 
         return redirect()->route('post.index');
     }
