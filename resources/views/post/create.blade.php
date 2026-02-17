@@ -7,6 +7,9 @@
                     <label for="title">title</label>
                     <input name="title" type="text" class="form-control" id="title" placeholder="title">
                 </div>
+                    @error('title')
+                    <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 <div class="form-group mt-3">
                     <label for="content">Content</label>
                     <textarea name="content" class="form-control" id="content" placeholder="Content"></textarea>
