@@ -5,25 +5,34 @@
                 @csrf
                 <div class="form-group mt-3">
                     <label for="title">title</label>
-                    <input name="title" type="text" class="form-control" id="title" placeholder="title">
-                </div>
+                    <input name="title" type="text" class="form-control" id="title" placeholder="title"
+                    value="{{ old('title') }}">
                     @error('title')
                     <p class="text-danger">{{ $message }}</p>
                     @enderror
+                </div>
                 <div class="form-group mt-3">
                     <label for="content">Content</label>
-                    <textarea name="content" class="form-control" id="content" placeholder="Content"></textarea>
+                    <textarea name="content" class="form-control" id="content" placeholder="Content">{{ old('content') }}</textarea>
+                     @error('content')
+                     <p class="text-danger">{{ $message }}</p>
+                     @enderror
                 </div>
                 <div class="form-group mt-3 mb-3">
                     <label for="image">Image</label>
-                    <input name="image" type="text" class="form-control" id="title" placeholder="image">
+                    <input value="{{ old('image') }}" name="image" type="text" class="form-control" id="title" placeholder="image">
+                    @error('image')
+                    <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
 
                     <label class="mb-3" for="category">Category</label>
 
                     <select class="form-control" name="category_id" id="category" aria-label="Default select example">
                         @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->title }}</option>
+                            <option
+                                {{ old('category_id') == $category->id ? ' selected' : ''}}
+                                value="{{ $category->id }}">{{ $category->title }}</option>
                         @endforeach
                     </select>
 
